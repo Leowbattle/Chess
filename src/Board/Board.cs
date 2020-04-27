@@ -68,19 +68,23 @@ namespace Chess
 		{
 			return new Board((Piece?[])board.Clone());
 		}
-		public IEnumerable<Position> GetPositions(Piece.Colour player)
+
+		public IEnumerable<Position> GetPositions()
 		{
 			for (int i = 0; i < Size; i++)
 			{
 				for (int j = 0; j < Size; j++)
 				{
-					var piece = this[new Position(j, i)];
-					if (piece?.Owner == player)
+					if (this[new Position(j, i)].HasValue)
 					{
 						yield return new Position(j, i);
 					}
 				}
 			}
+		}
+		public IEnumerable<Position> GetPositions(Piece.Colour player)
+		{
+			return GetPositions().Where(position => this[position].Value.Owner == player);
 		}
 
 		private IEnumerable<Position> _GetMoves(Position position)
@@ -147,7 +151,7 @@ namespace Chess
 			return false;
 		}
 
-		public event Action Checkmate;
+		public event Action<Piece.Colour> Checkmate;
 		public event Action Stalemate;
 
 		public static readonly Piece.PieceType[] PromotionOutcomes = new Piece.PieceType[]
@@ -198,7 +202,7 @@ namespace Chess
 				var kingpos = KingPosition(player);
 				if (UnderAttack(kingpos, player.Opposite()))
 				{
-					Checkmate?.Invoke();
+					Checkmate?.Invoke(player.Opposite());
 				}
 				else
 				{
@@ -238,7 +242,35 @@ namespace Chess
 
 			this[move.From] = null;
 
+			if (Detect2KingsStalemate())
+			{
+				Stalemate?.Invoke();
+			}
+
 			return taken;
+		}
+
+		/// <summary>
+		/// The game is at a stalemate if the only remaining pieces are kings.
+		/// </summary>
+		/// <returns></returns>
+		private bool Detect2KingsStalemate()
+		{
+			for (int i = 0; i < Size; i++)
+			{
+				for (int j = 0; j < Size; j++)
+				{
+					var position = new Position(j, i);
+					if (this[position].HasValue && this[position].Value.Type != Piece.PieceType.King)
+					{
+						return false;
+					}
+
+					continue;
+				}
+			}
+
+			return true;
 		}
 	}
 }

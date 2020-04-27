@@ -26,18 +26,30 @@ namespace Chess
 
 		public event Action<Position> SquareClicked;
 
+		public event Action<Piece.Colour> Checkmate;
+		public event Action Stalemate;
+
 		public async override void _Ready()
 		{
+			bool gameRunning = true;
+
 			Board = new Board();
-			Board.Checkmate += () =>
+			Board.Checkmate += winner =>
 			{
-				GD.Print("Checkmate!");
+				gameRunning = false;
+
+				GD.Print($"Checkmate! {winner} wins.");
+				Checkmate?.Invoke(winner);
 			};
 			Board.Stalemate += () =>
 			{
+				gameRunning = false;
+
 				GD.Print("Stalemate!");
+				Stalemate?.Invoke();
 			};
 
+			var squares = GetNode<Control>("Squares");
 			var colour = Piece.Colour.Black;
 			for (int i = 0; i < Board.Size; i++)
 			{
@@ -49,7 +61,7 @@ namespace Chess
 						SquareClicked?.Invoke(position);
 					};
 					Squares[j, i] = square;
-					AddChild(square);
+					squares.AddChild(square);
 
 					colour = colour.Opposite();
 				}
@@ -59,16 +71,20 @@ namespace Chess
 			WhitePlayer = new HumanPlayer(this, Piece.Colour.White);
 			BlackPlayer = new HumanPlayer(this, Piece.Colour.Black);
 
-			//WhitePlayer = new RandomPlayer(this, Piece.Colour.White);
-			//BlackPlayer = new RandomPlayer(this, Piece.Colour.Black);
+			WhitePlayer = new RandomPlayer(this, Piece.Colour.White);
+			BlackPlayer = new RandomPlayer(this, Piece.Colour.Black);
 
 			var drawer = new PieceDrawer(this);
-			AddChild(drawer);
+			squares.AddChild(drawer);
 
 			CurrentPlayer = Piece.Colour.White;
 			while (true)
 			{
 				LegalMoves = Board.GetMoves(CurrentPlayer).ToHashSet();
+				if (!gameRunning)
+				{
+					break;
+				}
 
 				var move = await Current.GetMoveAsync();
 				await Task.Delay(25);
