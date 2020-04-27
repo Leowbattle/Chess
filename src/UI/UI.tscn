@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/UI/UITheme.tres" type="Theme" id=1]
 [ext_resource path="res://src/UI/UI.cs" type="Script" id=2]
 [ext_resource path="res://src/UI/LargeFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://src/Pieces/white_rook.svg" type="Texture" id=4]
+[ext_resource path="res://src/Pieces/black_rook.svg" type="Texture" id=5]
+[ext_resource path="res://src/Pieces/white_knight.svg" type="Texture" id=6]
+[ext_resource path="res://src/Pieces/white_bishop.svg" type="Texture" id=7]
+[ext_resource path="res://src/Pieces/white_queen.svg" type="Texture" id=8]
+[ext_resource path="res://src/UI/PromotionUI.cs" type="Script" id=9]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -69,3 +75,63 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Promotion" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -186.0
+margin_top = -112.5
+margin_right = 186.0
+margin_bottom = 112.5
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Promotion" type="Label" parent="Promotion"]
+margin_right = 372.0
+margin_bottom = 84.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0.172549, 1, 0, 1 )
+text = "Promotion!"
+align = 1
+
+[node name="Label" type="Label" parent="Promotion"]
+margin_top = 88.0
+margin_right = 372.0
+margin_bottom = 131.0
+text = "Pick a piece"
+align = 1
+
+[node name="Choices" type="HBoxContainer" parent="Promotion"]
+margin_top = 135.0
+margin_right = 372.0
+margin_bottom = 225.0
+alignment = 1
+
+[node name="Rook" type="TextureButton" parent="Promotion/Choices"]
+margin_right = 90.0
+margin_bottom = 90.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+
+[node name="Knight" type="TextureButton" parent="Promotion/Choices"]
+margin_left = 94.0
+margin_right = 184.0
+margin_bottom = 90.0
+texture_normal = ExtResource( 6 )
+
+[node name="Bishop" type="TextureButton" parent="Promotion/Choices"]
+margin_left = 188.0
+margin_right = 278.0
+margin_bottom = 90.0
+texture_normal = ExtResource( 7 )
+
+[node name="Queen" type="TextureButton" parent="Promotion/Choices"]
+margin_left = 282.0
+margin_right = 372.0
+margin_bottom = 90.0
+texture_normal = ExtResource( 8 )

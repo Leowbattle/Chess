@@ -71,6 +71,7 @@
     <Compile Include="src\Players\Player.cs" />
     <Compile Include="src\Players\HumanPlayer.cs" />
     <Compile Include="src\Players\RandomPlayer.cs" />
+    <Compile Include="src\UI\PromotionUI.cs" />
     <Compile Include="src\UI\UI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

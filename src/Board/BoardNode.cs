@@ -15,6 +15,8 @@ namespace Chess
 
 		public SquareNode[,] Squares = new SquareNode[8, 8];
 
+		public UI UI { get; private set; }
+
 		public Player WhitePlayer;
 		public Player BlackPlayer;
 
@@ -49,6 +51,8 @@ namespace Chess
 				Stalemate?.Invoke();
 			};
 
+			UI = GetNode<UI>("UI");
+
 			var squares = GetNode<Control>("Squares");
 			var colour = Piece.Colour.Black;
 			for (int i = 0; i < Board.Size; i++)
@@ -71,8 +75,8 @@ namespace Chess
 			WhitePlayer = new HumanPlayer(this, Piece.Colour.White);
 			BlackPlayer = new HumanPlayer(this, Piece.Colour.Black);
 
-			WhitePlayer = new RandomPlayer(this, Piece.Colour.White);
-			BlackPlayer = new RandomPlayer(this, Piece.Colour.Black);
+			//WhitePlayer = new RandomPlayer(this, Piece.Colour.White);
+			//BlackPlayer = new RandomPlayer(this, Piece.Colour.Black);
 
 			var drawer = new PieceDrawer(this);
 			squares.AddChild(drawer);
@@ -90,7 +94,7 @@ namespace Chess
 				await Task.Delay(25);
 
 				GD.Print($"{CurrentPlayer} wants to move {move}");
-				Board.DoMove(move, p => Current.Promote(p).Result);
+				await Task.Run(() => Board.DoMove(move, p => Current.Promote(p).Result));
 				drawer.Update();
 
 				CurrentPlayer = CurrentPlayer.Opposite();

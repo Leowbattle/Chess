@@ -81,7 +81,7 @@ namespace Chess
 
 		protected override Task<Piece.PieceType> _Promote(Position position)
 		{
-			throw new NotImplementedException();
+			return Board.UI.PromotionUI.GetChoice();
 		}
 	}
 }

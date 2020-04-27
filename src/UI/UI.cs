@@ -7,12 +7,16 @@ namespace Chess
 	{
 		private BoardNode Board;
 
+		public PromotionUI PromotionUI { get; private set; }
+
 		public override void _Ready()
 		{
 			Board = GetParent<BoardNode>();
 
 			Board.Checkmate += OnCheckmate;
 			Board.Stalemate += OnStalemate;
+
+			PromotionUI = GetNode<PromotionUI>("Promotion");
 		}
 
 		private void OnCheckmate(Piece.Colour winner)
