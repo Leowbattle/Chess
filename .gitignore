@@ -1,0 +1,12 @@
+# Import cache
+.import/
+
+.mono/
+.vs/
+
+*.blend1
+
+# Binaries
+bin/
+build/
+lib/
