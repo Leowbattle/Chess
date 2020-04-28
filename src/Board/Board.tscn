@@ -27,3 +27,5 @@ __meta__ = {
 }
 
 [node name="UI" parent="." instance=ExtResource( 3 )]
+margin_left = 1.10803
+margin_right = 1.10803

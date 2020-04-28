@@ -63,6 +63,7 @@ namespace Chess
 		}
 
 		public ref Piece? this[Position pos] => ref board[pos.Rank * Size + pos.File];
+		public ref Piece? this[char file, int rank] => ref this[(file, rank)];
 
 		public Board Clone()
 		{
