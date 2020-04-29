@@ -33,7 +33,7 @@ namespace Chess
 
 				float min = float.PositiveInfinity;
 
-				var nextMoves = b.GetMoves(Player);
+				var nextMoves = b.GetMoves(Player.Opposite());
 				foreach (var nm in nextMoves)
 				{
 					var b2 = b.Clone();
