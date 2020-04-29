@@ -13,6 +13,16 @@ namespace Chess
 			To = to;
 		}
 
+		public static bool operator ==(Move a, Move b)
+		{
+			return a.From == b.From && a.To == b.To;
+		}
+
+		public static bool operator !=(Move a, Move b)
+		{
+			return !(a == b);
+		}
+
 		public override string ToString()
 		{
 			return $"Move from {From} to {To}";

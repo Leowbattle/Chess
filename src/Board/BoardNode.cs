@@ -94,7 +94,7 @@ namespace Chess
 				}
 
 				var move = await Current.GetMoveAsync();
-				await Task.Delay(10);
+				//await Task.Delay(250);
 
 				GD.Print($"{CurrentPlayer} wants to move {move}");
 				await Task.Run(() => Board.DoMove(move, p => Current.Promote(p).Result));

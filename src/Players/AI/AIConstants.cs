@@ -28,5 +28,7 @@ namespace Chess
 		public float OpponentMiddleSquareMultiplier = -0.8f;
 
 		public float CheckmateScore = 1000;
+
+		public float RepeatMoveScore = -100;
 	}
 }
