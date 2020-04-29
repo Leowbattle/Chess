@@ -49,18 +49,19 @@ namespace Chess
 
 					var score = BoardScorer.Score(b2, Player, constants);
 
-					if (History.Count > 2)
-					{
-						if (nm == History[History.Count - 3])
-						{
-							Godot.GD.Print("repeat >:(");
-							score += constants.RepeatMoveScore;
-						}
-					}
-
 					if (score < min)
 					{
 						min = score;
+					}
+				}
+
+				// This stops the AI from oscilalting between positions
+				if (History.Count > 2)
+				{
+					if (move == History[History.Count - 2])
+					{
+						// Godot.GD.Print("repeat >:(");
+						min += constants.RepeatMoveScore;
 					}
 				}
 
