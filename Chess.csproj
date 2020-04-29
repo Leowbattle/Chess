@@ -57,6 +57,7 @@
     <Compile Include="src\Board\BoardNode.cs" />
     <Compile Include="src\Board\SquareNode.cs" />
     <Compile Include="src\Board\Move.cs" />
+    <Compile Include="src\Menu.cs" />
     <Compile Include="src\Pieces\Piece.cs" />
     <Compile Include="src\Pieces\Pawn.cs" />
     <Compile Include="src\Pieces\Rook.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="src\Players\AI\BoardScorer.cs" />
     <Compile Include="src\Players\AI\MoveChooser.cs" />
     <Compile Include="src\Players\AI\AIConstants.cs" />
+    <Compile Include="src\UI\PlayerTypeSelector.cs" />
     <Compile Include="src\UI\PromotionUI.cs" />
     <Compile Include="src\UI\UI.cs" />
   </ItemGroup>

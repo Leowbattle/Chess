@@ -72,14 +72,14 @@ namespace Chess
 				colour = colour.Opposite();
 			}
 
-			WhitePlayer = new HumanPlayer(this, Piece.Colour.White);
+			// WhitePlayer = new HumanPlayer(this, Piece.Colour.White);
 			//BlackPlayer = new HumanPlayer(this, Piece.Colour.Black);
 
 			//WhitePlayer = new RandomPlayer(this, Piece.Colour.White);
 			//BlackPlayer = new RandomPlayer(this, Piece.Colour.Black);
 
 			//WhitePlayer = new AIPlayer(this, Piece.Colour.White);
-			BlackPlayer = new AIPlayer(this, Piece.Colour.Black);
+			// BlackPlayer = new AIPlayer(this, Piece.Colour.Black);
 
 			var drawer = new PieceDrawer(this);
 			squares.AddChild(drawer);
@@ -94,7 +94,7 @@ namespace Chess
 				}
 
 				var move = await Current.GetMoveAsync();
-				//await Task.Delay(250);
+				await Task.Delay(10);
 
 				GD.Print($"{CurrentPlayer} wants to move {move}");
 				await Task.Run(() => Board.DoMove(move, p => Current.Promote(p).Result));

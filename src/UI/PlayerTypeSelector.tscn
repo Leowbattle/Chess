@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/UI/UITheme.tres" type="Theme" id=1]
+[ext_resource path="res://src/UI/PlayerTypeSelector.cs" type="Script" id=2]
+
+[node name="White" type="HBoxContainer"]
+margin_top = 88.0
+margin_right = 215.0
+margin_bottom = 137.0
+theme = ExtResource( 1 )
+alignment = 1
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Who" type="Label" parent="."]
+margin_top = 3.0
+margin_right = 89.0
+margin_bottom = 46.0
+text = "White:"
+align = 2
+
+[node name="Type" type="OptionButton" parent="."]
+margin_left = 93.0
+margin_right = 215.0
+margin_bottom = 49.0
+size_flags_horizontal = 3
+text = "Human"
+items = [ "Human", null, false, 0, null, "Computer", null, false, 1, null, "Random", null, false, 2, null ]
+selected = 0
