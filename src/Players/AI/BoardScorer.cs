@@ -95,33 +95,60 @@ namespace Chess
 		{
 			float score = 0;
 
-			foreach (var square in MiddleSquares)
+			for (int i = 0; i < Board.Size; i++)
 			{
-				if (Board[square] is Piece piece)
+				for (int j = 0; j < Board.Size; j++)
 				{
-					if (piece.Owner == Player)
+					var position = new Position(j, i);
+					if (Board[position] is Piece piece)
 					{
-						score += Constants.MiddleSquareScore;
-					}
-					else
-					{
-						score += Constants.MiddleSquareScore * Constants.OpponentMiddleSquareMultiplier;
+						var dscore = position.DistanceToCentre() * Constants.MiddleSquareScore;
+
+						if (piece.Owner == Player)
+						{
+							score -= dscore;
+						}
+						else
+						{
+							score -= dscore * Constants.OpponentMiddleSquareMultiplier;
+						}
 					}
 				}
 			}
 
 			return score;
 		}
+		// private float ScoreMiddleSquares()
+		// {
+		// 	float score = 0;
+
+		// 	foreach (var square in MiddleSquares)
+		// 	{
+		// 		if (Board[square] is Piece piece)
+		// 		{
+		// 			if (piece.Owner == Player)
+		// 			{
+		// 				score += Constants.MiddleSquareScore;
+		// 			}
+		// 			else
+		// 			{
+		// 				score += Constants.MiddleSquareScore * Constants.OpponentMiddleSquareMultiplier;
+		// 			}
+		// 		}
+		// 	}
+
+		// 	return score;
+		// }
 	}
 
-	// static class PositionExt
-	// {
-	// 	public static float DistanceToCentre(this Position position)
-	// 	{
-	// 		var dx = 3.5f - position.File;
-	// 		var dy = 3.5f - position.Rank;
+	static class PositionExt
+	{
+		public static float DistanceToCentre(this Position position)
+		{
+			var dx = 3.5f - position.File;
+			var dy = 3.5f - position.Rank;
 
-	// 		return (float)Math.Sqrt(dx * dx + dy * dy);
-	// 	}
-	// }
+			return (float)Math.Sqrt(dx * dx + dy * dy);
+		}
+	}
 }

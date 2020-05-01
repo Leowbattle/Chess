@@ -20,7 +20,7 @@ namespace Chess
 		/// <summary>
 		/// How many points you gain for having pieces in the middle squares.
 		/// </summary>
-		public float MiddleSquareScore = 1;
+		public float MiddleSquareScore = 0.25f;
 
 		/// <summary>
 		/// Multiplier for many points you lose when the other player has pieces in the middle squares.
