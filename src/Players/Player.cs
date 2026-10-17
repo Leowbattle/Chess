@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using System.Linq;
 
 namespace Chess
@@ -26,19 +25,21 @@ namespace Chess
 			MoveFromSelected?.Invoke(position);
 		}
 
-		public abstract Task<Move> GetMoveAsync();
+		public abstract void GetMove(Action<Move> onMoveChosen);
 
-		public async Task<Piece.PieceType> Promote(Position position)
+		public void Promote(Position position, Action<Piece.PieceType> onPromoted)
 		{
-			var promotion = await _Promote(position);
-			if (Chess.Board.PromotionOutcomes.Contains(promotion))
+			_Promote(position, promotion =>
 			{
-				return promotion;
-			}
+				if (!Chess.Board.PromotionOutcomes.Contains(promotion))
+				{
+					throw new InvalidOperationException("Can only promote to rooks, knights, bishops, or queens");
+				}
 
-			throw new InvalidOperationException("Can only promote to rooks, knights, bishops, or queens");
+				onPromoted(promotion);
+			});
 		}
 
-		protected abstract Task<Piece.PieceType> _Promote(Position position);
+		protected abstract void _Promote(Position position, Action<Piece.PieceType> onPromoted);
 	}
 }

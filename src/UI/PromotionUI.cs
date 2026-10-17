@@ -1,8 +1,5 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Chess
 {
@@ -10,9 +7,9 @@ namespace Chess
 	{
 		private BoardNode Board;
 
-		private TaskCompletionSource<Piece.PieceType> Tcs;
+		private Action<Piece.PieceType> OnChoice;
 
-		public async Task<Piece.PieceType> GetChoice()
+		public void GetChoice(Action<Piece.PieceType> onChoice)
 		{
 			if (Board.CurrentPlayer == Piece.Colour.White)
 			{
@@ -29,13 +26,8 @@ namespace Chess
 				Queen.TextureNormal = Resources.BlackPieces[Piece.PieceType.Queen];
 			}
 
+			OnChoice = onChoice;
 			Visible = true;
-
-			var choice = await Tcs.Task;
-
-			Visible = false;
-
-			return choice;
 		}
 
 		private TextureButton Rook;
@@ -46,8 +38,6 @@ namespace Chess
 		public override void _Ready()
 		{
 			Board = GetParent<UI>().GetParent<BoardNode>();
-
-			Tcs = new TaskCompletionSource<Piece.PieceType>();
 
 			Rook = GetNode<TextureButton>("Choices/Rook");
 			Knight = GetNode<TextureButton>("Choices/Knight");
@@ -60,28 +50,21 @@ namespace Chess
 			Queen.Connect("pressed", this, nameof(QueenChosen));
 		}
 
-		private void RookChosen()
-		{
-			Tcs.SetResult(Piece.PieceType.Rook);
-			Tcs = new TaskCompletionSource<Piece.PieceType>();
-		}
+		private void RookChosen() => Choose(Piece.PieceType.Rook);
 
-		private void KnightChosen()
-		{
-			Tcs.SetResult(Piece.PieceType.Knight);
-			Tcs = new TaskCompletionSource<Piece.PieceType>();
-		}
+		private void KnightChosen() => Choose(Piece.PieceType.Knight);
 
-		private void BishopChosen()
-		{
-			Tcs.SetResult(Piece.PieceType.Bishop);
-			Tcs = new TaskCompletionSource<Piece.PieceType>();
-		}
+		private void BishopChosen() => Choose(Piece.PieceType.Bishop);
 
-		private void QueenChosen()
+		private void QueenChosen() => Choose(Piece.PieceType.Queen);
+
+		private void Choose(Piece.PieceType type)
 		{
-			Tcs.SetResult(Piece.PieceType.Queen);
-			Tcs = new TaskCompletionSource<Piece.PieceType>();
+			Visible = false;
+
+			var callback = OnChoice;
+			OnChoice = null;
+			callback?.Invoke(type);
 		}
 	}
 }

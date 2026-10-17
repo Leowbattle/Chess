@@ -1,87 +1,67 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Linq;
-using Godot;
 
 namespace Chess
 {
 	public class HumanPlayer : Player
 	{
-		private TaskCompletionSource<Position> SquareClickedTcs;
-
-		private async Task<Position> SquareClicked()
-		{
-			var p = await SquareClickedTcs.Task;
-
-			// If this is not here "SquareClickedTcs = new TaskCompletionSource<Position>();"
-			// does not get a chance to run after "SquareClickedTcs.SetResult(p);"
-			await Task.Yield();
-
-			return p;
-		}
+		private Action<Move> OnMoveChosen;
+		private Position? From;
 
 		public HumanPlayer(BoardNode board, Piece.Colour colour) : base(board, colour)
 		{
-			SquareClickedTcs = new TaskCompletionSource<Position>();
-			board.SquareClicked += p =>
-			{
-				if (Board.CurrentPlayer != Colour)
-				{
-					return;
-				}
-
-				SquareClickedTcs.SetResult(p);
-				SquareClickedTcs = new TaskCompletionSource<Position>();
-			};
+			board.SquareClicked += OnSquareClicked;
 		}
 
-		public override async Task<Move> GetMoveAsync()
+		public override void GetMove(Action<Move> onMoveChosen)
 		{
-			while (true)
+			OnMoveChosen = onMoveChosen;
+			From = null;
+			InvokeMoveFromSelected(null);
+		}
+
+		private void OnSquareClicked(Position position)
+		{
+			if (Board.CurrentPlayer != Colour || OnMoveChosen == null)
 			{
-				Position from;
-				while (true)
-				{
-					from = await SquareClicked();
-					if (Board.LegalMoves.Any(m => m.From == from))
-					{
-						break;
-					}
-				}
-				InvokeMoveFromSelected(from);
-
-				Position to;
-				while (true)
-				{
-					to = await SquareClicked();
-
-					if (Board.Board[to]?.Owner == Colour)
-					{
-						from = to;
-						InvokeMoveFromSelected(from);
-					}
-					else
-					{
-						break;
-					}
-				}
-
-				var move = new Move(from, to);
-
-				if (!Board.LegalMoves.Contains(move))
-				{
-					InvokeMoveFromSelected(null);
-					continue;
-				}
-
-				return move;
+				return;
 			}
+
+			if (From == null)
+			{
+				if (Board.LegalMoves.Any(m => m.From == position))
+				{
+					From = position;
+					InvokeMoveFromSelected(position);
+				}
+				return;
+			}
+
+			if (Board.Board[position]?.Owner == Colour)
+			{
+				From = position;
+				InvokeMoveFromSelected(position);
+				return;
+			}
+
+			var move = new Move(From.Value, position);
+			From = null;
+
+			if (!Board.LegalMoves.Contains(move))
+			{
+				InvokeMoveFromSelected(null);
+				return;
+			}
+
+			var callback = OnMoveChosen;
+			OnMoveChosen = null;
+			InvokeMoveFromSelected(null);
+			callback(move);
 		}
 
-		protected override Task<Piece.PieceType> _Promote(Position position)
+		protected override void _Promote(Position position, Action<Piece.PieceType> onPromoted)
 		{
-			return Board.UI.PromotionUI.GetChoice();
+			Board.UI.PromotionUI.GetChoice(onPromoted);
 		}
 	}
 }
