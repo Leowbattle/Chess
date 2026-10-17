@@ -1,7 +1,5 @@
 using System;
-using System.Threading.Tasks;
 using System.Linq;
-using Godot;
 
 namespace Chess
 {
@@ -14,18 +12,18 @@ namespace Chess
 			Random = new Random();
 		}
 
-		public override Task<Move> GetMoveAsync()
+		public override void GetMove(Action<Move> onMoveChosen)
 		{
 			var move = Board.LegalMoves.ElementAt(Random.Next(0, Board.LegalMoves.Count - 1));
 			InvokeMoveFromSelected(move.From);
 
-			return Task.FromResult(move);
+			onMoveChosen(move);
 		}
 
-		protected override Task<Piece.PieceType> _Promote(Position position)
+		protected override void _Promote(Position position, Action<Piece.PieceType> onPromoted)
 		{
 			var promotion = Chess.Board.PromotionOutcomes[Random.Next(0, Chess.Board.PromotionOutcomes.Length - 1)];
-			return Task.FromResult(promotion);
+			onPromoted(promotion);
 		}
 	}
 }

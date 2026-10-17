@@ -1,7 +1,5 @@
 using Godot;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,9 +29,12 @@ namespace Chess
 		public event Action<Piece.Colour> Checkmate;
 		public event Action Stalemate;
 
-		public async override void _Ready()
+		private PieceDrawer Drawer;
+		private bool gameRunning;
+
+		public override void _Ready()
 		{
-			bool gameRunning = true;
+			gameRunning = true;
 
 			Board = new Board();
 			Board.Checkmate += winner =>
@@ -81,27 +82,70 @@ namespace Chess
 			//WhitePlayer = new AIPlayer(this, Piece.Colour.White);
 			// BlackPlayer = new AIPlayer(this, Piece.Colour.Black);
 
-			var drawer = new PieceDrawer(this);
-			squares.AddChild(drawer);
+			Drawer = new PieceDrawer(this);
+			squares.AddChild(Drawer);
 
 			CurrentPlayer = Piece.Colour.White;
-			while (true)
+			StartTurn();
+		}
+
+		private void StartTurn()
+		{
+			if (!gameRunning)
 			{
-				LegalMoves = Board.GetMoves(CurrentPlayer).ToHashSet();
-				if (!gameRunning)
-				{
-					break;
-				}
-
-				var move = await Current.GetMoveAsync();
-				await Task.Delay(10);
-
-				GD.Print($"{CurrentPlayer} wants to move {move}");
-				await Task.Run(() => Board.DoMove(move, p => Current.Promote(p).Result));
-				drawer.Update();
-
-				CurrentPlayer = CurrentPlayer.Opposite();
+				return;
 			}
+
+			LegalMoves = Board.GetMoves(CurrentPlayer).ToHashSet();
+			Current.GetMove(OnMoveChosen);
+		}
+
+		private void OnMoveChosen(Move move)
+		{
+			if (!gameRunning)
+			{
+				return;
+			}
+
+			GD.Print($"{CurrentPlayer} wants to move {move}");
+
+			if (IsPromotion(move))
+			{
+				Current.Promote(move.To, promotion => ApplyMove(move, promotion));
+			}
+			else
+			{
+				ApplyMove(move, Piece.PieceType.Queen);
+			}
+		}
+
+		private bool IsPromotion(Move move)
+		{
+			var piece = Board[move.From];
+			if (piece?.Type != Piece.PieceType.Pawn)
+			{
+				return false;
+			}
+
+			var promotionRank = piece.Value.Owner == Piece.Colour.White ? 7 : 0;
+			return move.To.Rank == promotionRank;
+		}
+
+		private void ApplyMove(Move move, Piece.PieceType promotion)
+		{
+			Board.DoMove(move, _ => promotion);
+			Drawer.Update();
+
+			CurrentPlayer = CurrentPlayer.Opposite();
+
+			if (!gameRunning)
+			{
+				return;
+			}
+
+			// Give the engine a frame to draw the move before the next turn.
+			GetTree().CreateTimer(0.05f)
+				.Connect("timeout", this, nameof(StartTurn));
 		}
 
 		public static Vector2 ScreenCoords(Position pos)

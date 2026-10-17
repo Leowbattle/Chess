@@ -1,8 +1,13 @@
 # Import cache
+.godot/
 .import/
 
 .mono/
 .vs/
+
+# Godot editor migration backups
+Chess.csproj.old
+Chess.sln.old
 
 *.blend1
 

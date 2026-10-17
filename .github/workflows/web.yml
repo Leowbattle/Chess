@@ -1,0 +1,108 @@
+name: Web build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_BASE_URL: https://github.com/godotengine/godot-builds/releases/download/3.6-stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Cache Godot 3.6 Mono
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot-3.6-mono
+            ~/.local/share/godot/templates/3.6.stable.mono
+          key: godot-3.6-mono-${{ runner.os }}
+
+      - name: Install Godot 3.6 Mono
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot/editor" \
+                   "$RUNNER_TEMP/godot/templates" \
+                   "$HOME/godot-3.6-mono" \
+                   "$HOME/.local/share/godot/templates/3.6.stable.mono"
+
+          curl -fsSL -o "$RUNNER_TEMP/godot/godot.zip" \
+            "$GODOT_BASE_URL/Godot_v3.6-stable_mono_linux_headless_64.zip"
+          curl -fsSL -o "$RUNNER_TEMP/godot/templates.tpz" \
+            "$GODOT_BASE_URL/Godot_v3.6-stable_mono_export_templates.tpz"
+
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot/editor"
+          unzip -q "$RUNNER_TEMP/godot/templates.tpz" -d "$RUNNER_TEMP/godot/templates"
+
+          cp -r "$RUNNER_TEMP/godot/editor/Godot_v3.6-stable_mono_linux_headless_64/." \
+                "$HOME/godot-3.6-mono/"
+          cp -r "$RUNNER_TEMP/godot/templates/templates/." \
+                "$HOME/.local/share/godot/templates/3.6.stable.mono/"
+
+          chmod +x "$HOME/godot-3.6-mono/Godot_v3.6-stable_mono_linux_headless.64"
+
+      - name: Configure Godot
+        run: |
+          echo "GODOT_BIN=$HOME/godot-3.6-mono/Godot_v3.6-stable_mono_linux_headless.64" >> "$GITHUB_ENV"
+
+      - name: Build C#
+        run: |
+          set -euo pipefail
+          mkdir -p .mono/assemblies/Release
+          cp "$HOME/godot-3.6-mono/GodotSharp/Api/Release/GodotSharp.dll" \
+             .mono/assemblies/Release/
+          dotnet build Chess.csproj -c ExportRelease
+
+      - name: Export web build
+        run: |
+          set -euo pipefail
+          mkdir -p build/web
+          "$GODOT_BIN" --path . --export "HTML5" build/web/index.html
+          rm -f build/web/*.import
+          test -f build/web/index.html
+          ls -lh build/web
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chess-web
+          path: build/web
+
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: build/web
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

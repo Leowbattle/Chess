@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 namespace Chess
 {
@@ -15,16 +14,17 @@ namespace Chess
 			Constants = AIConstants.Default;
 		}
 
-		public override Task<Move> GetMoveAsync()
+		public override void GetMove(Action<Move> onMoveChosen)
 		{
-			return Task.FromResult(MoveChooser.ChooseMove(Board.Board, Board.LegalMoves));
+			var move = MoveChooser.ChooseMove(Board.Board, Board.LegalMoves);
+			onMoveChosen(move);
 		}
 
-		protected override Task<Piece.PieceType> _Promote(Position position)
+		protected override void _Promote(Position position, Action<Piece.PieceType> onPromoted)
 		{
 			// TODO Improve
 
-			return Task.FromResult(Piece.PieceType.Queen);
+			onPromoted(Piece.PieceType.Queen);
 		}
 	}
 }
