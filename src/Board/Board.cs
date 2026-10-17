@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Chess
 {
-	public class Board
+	public partial class Board
 	{
 		public const int Size = 8;
 

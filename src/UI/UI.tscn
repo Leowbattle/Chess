@@ -2,12 +2,12 @@
 
 [ext_resource path="res://src/UI/UITheme.tres" type="Theme" id=1]
 [ext_resource path="res://src/UI/UI.cs" type="Script" id=2]
-[ext_resource path="res://src/UI/LargeFont.tres" type="DynamicFont" id=3]
-[ext_resource path="res://src/Pieces/white_rook.svg" type="Texture" id=4]
-[ext_resource path="res://src/Pieces/black_rook.svg" type="Texture" id=5]
-[ext_resource path="res://src/Pieces/white_knight.svg" type="Texture" id=6]
-[ext_resource path="res://src/Pieces/white_bishop.svg" type="Texture" id=7]
-[ext_resource path="res://src/Pieces/white_queen.svg" type="Texture" id=8]
+[ext_resource path="res://src/UI/CrimsonText-Regular.ttf" type="FontFile" id=3]
+[ext_resource path="res://src/Pieces/white_rook.svg" type="Texture2D" id=4]
+[ext_resource path="res://src/Pieces/black_rook.svg" type="Texture2D" id=5]
+[ext_resource path="res://src/Pieces/white_knight.svg" type="Texture2D" id=6]
+[ext_resource path="res://src/Pieces/white_bishop.svg" type="Texture2D" id=7]
+[ext_resource path="res://src/Pieces/white_queen.svg" type="Texture2D" id=8]
 [ext_resource path="res://src/UI/PromotionUI.cs" type="Script" id=9]
 
 [node name="Control" type="Control"]
@@ -25,19 +25,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -140.0
-margin_top = -126.34
-margin_right = 140.0
-margin_bottom = 126.34
+offset_left = -140.0
+offset_top = -126.34
+offset_right = 140.0
+offset_bottom = 126.34
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Checkmate" type="Label" parent="Checkmate"]
-margin_right = 280.0
-margin_bottom = 84.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 1, 0, 0, 1 )
+offset_right = 280.0
+offset_bottom = 84.0
+theme_override_fonts/font = ExtResource( 3 )
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color( 1, 0, 0, 1 )
 text = "Checkmate"
 align = 1
 __meta__ = {
@@ -45,16 +46,16 @@ __meta__ = {
 }
 
 [node name="Who" type="Label" parent="Checkmate"]
-margin_top = 88.0
-margin_right = 280.0
-margin_bottom = 131.0
+offset_top = 88.0
+offset_right = 280.0
+offset_bottom = 131.0
 text = "aaaaaaaa"
 align = 1
 
 [node name="Menu" type="Button" parent="Checkmate"]
-margin_top = 135.0
-margin_right = 280.0
-margin_bottom = 184.0
+offset_top = 135.0
+offset_right = 280.0
+offset_bottom = 184.0
 text = "Menu"
 
 [node name="Stalemate" type="VBoxContainer" parent="."]
@@ -63,19 +64,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -121.5
-margin_top = -68.5
-margin_right = 121.5
-margin_bottom = 68.5
+offset_left = -121.5
+offset_top = -68.5
+offset_right = 121.5
+offset_bottom = 68.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Stalemate" type="Label" parent="Stalemate"]
-margin_right = 243.0
-margin_bottom = 84.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 1, 0, 0.984314, 1 )
+offset_right = 243.0
+offset_bottom = 84.0
+theme_override_fonts/font = ExtResource( 3 )
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color( 1, 0, 0.984314, 1 )
 text = "Stalemate"
 align = 1
 __meta__ = {
@@ -83,9 +85,9 @@ __meta__ = {
 }
 
 [node name="Menu" type="Button" parent="Stalemate"]
-margin_top = 88.0
-margin_right = 243.0
-margin_bottom = 137.0
+offset_top = 88.0
+offset_right = 243.0
+offset_bottom = 137.0
 text = "Menu"
 
 [node name="Promotion" type="VBoxContainer" parent="."]
@@ -94,56 +96,57 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -186.0
-margin_top = -112.5
-margin_right = 186.0
-margin_bottom = 112.5
+offset_left = -186.0
+offset_top = -112.5
+offset_right = 186.0
+offset_bottom = 112.5
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Promotion" type="Label" parent="Promotion"]
-margin_right = 372.0
-margin_bottom = 84.0
-custom_fonts/font = ExtResource( 3 )
-custom_colors/font_color = Color( 0.172549, 1, 0, 1 )
+offset_right = 372.0
+offset_bottom = 84.0
+theme_override_fonts/font = ExtResource( 3 )
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color( 0.172549, 1, 0, 1 )
 text = "Promotion!"
 align = 1
 
 [node name="Label" type="Label" parent="Promotion"]
-margin_top = 88.0
-margin_right = 372.0
-margin_bottom = 131.0
+offset_top = 88.0
+offset_right = 372.0
+offset_bottom = 131.0
 text = "Pick a piece"
 align = 1
 
 [node name="Choices" type="HBoxContainer" parent="Promotion"]
-margin_top = 135.0
-margin_right = 372.0
-margin_bottom = 225.0
+offset_top = 135.0
+offset_right = 372.0
+offset_bottom = 225.0
 alignment = 1
 
 [node name="Rook" type="TextureButton" parent="Promotion/Choices"]
-margin_right = 90.0
-margin_bottom = 90.0
+offset_right = 90.0
+offset_bottom = 90.0
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 5 )
 
 [node name="Knight" type="TextureButton" parent="Promotion/Choices"]
-margin_left = 94.0
-margin_right = 184.0
-margin_bottom = 90.0
+offset_left = 94.0
+offset_right = 184.0
+offset_bottom = 90.0
 texture_normal = ExtResource( 6 )
 
 [node name="Bishop" type="TextureButton" parent="Promotion/Choices"]
-margin_left = 188.0
-margin_right = 278.0
-margin_bottom = 90.0
+offset_left = 188.0
+offset_right = 278.0
+offset_bottom = 90.0
 texture_normal = ExtResource( 7 )
 
 [node name="Queen" type="TextureButton" parent="Promotion/Choices"]
-margin_left = 282.0
-margin_right = 372.0
-margin_bottom = 90.0
+offset_left = 282.0
+offset_right = 372.0
+offset_bottom = 90.0
 texture_normal = ExtResource( 8 )

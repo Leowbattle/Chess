@@ -5,7 +5,7 @@ using Godot;
 
 namespace Chess
 {
-	public class RandomPlayer : Player
+	public partial class RandomPlayer : Player
 	{
 		private Random Random;
 

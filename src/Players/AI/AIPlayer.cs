@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-	public class AIPlayer : Player
+	public partial class AIPlayer : Player
 	{
 		private MoveChooser MoveChooser;
 

@@ -3,7 +3,7 @@ using System;
 
 namespace Chess
 {
-	public class Menu : Control
+	public partial class Menu : Control
 	{
 		private PlayerTypeSelector White;
 		private PlayerTypeSelector Black;
@@ -14,7 +14,7 @@ namespace Chess
 			Black = GetNode<PlayerTypeSelector>("Menu/Black");
 
 			var play = GetNode<Button>("Menu/Play");
-			play.Connect("pressed", this, nameof(Play));
+			play.Connect("pressed", new Callable(this, nameof(Play)));
 		}
 
 		private Player CreatePlayer(PlayerTypeSelector.PlayerType type, BoardNode board, Piece.Colour colour)
@@ -35,7 +35,7 @@ namespace Chess
 		private void Play()
 		{
 			var scn = GD.Load<PackedScene>("src/Board/Board.tscn");
-			var game = (BoardNode)scn.Instance();
+			var game = (BoardNode)scn.Instantiate();
 
 			game.WhitePlayer = CreatePlayer(White.Selection, game, Piece.Colour.White);
 			game.BlackPlayer = CreatePlayer(Black.Selection, game, Piece.Colour.Black);

@@ -9,10 +9,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -360.0
-margin_top = -360.0
-margin_right = 360.0
-margin_bottom = 360.0
+offset_left = -360.0
+offset_top = -360.0
+offset_right = 360.0
+offset_bottom = 360.0
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -27,5 +27,5 @@ __meta__ = {
 }
 
 [node name="UI" parent="." instance=ExtResource( 3 )]
-margin_left = 1.10803
-margin_right = 1.10803
+offset_left = 1.10803
+offset_right = 1.10803

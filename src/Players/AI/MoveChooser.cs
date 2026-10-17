@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Chess
 {
-	public class MoveChooser
+	public partial class MoveChooser
 	{
 		private Piece.Colour Player;
 

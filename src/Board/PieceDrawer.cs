@@ -4,7 +4,7 @@ using Godot;
 
 namespace Chess
 {
-	public class PieceDrawer : Node2D
+	public partial class PieceDrawer : Node2D
 	{
 		private BoardNode Board;
 
@@ -20,7 +20,7 @@ namespace Chess
 		private void MoveFromSelected(Position? pos)
 		{
 			MoveFrom = pos;
-			Update();
+			QueueRedraw();
 		}
 
 		public override void _Draw()
@@ -56,7 +56,7 @@ namespace Chess
 			{
 				foreach (var move in Board.LegalMoves.Where(m => m.From == MoveFrom))
 				{
-					var colour = Colors.Limegreen;
+					var colour = Colors.LimeGreen;
 					if (Board.Board[move.To].HasValue)
 					{
 						colour = Colors.Red;
@@ -66,7 +66,7 @@ namespace Chess
 			}
 		}
 
-		private Texture PieceTexture(Piece piece)
+		private Texture2D PieceTexture(Piece piece)
 		{
 			return piece.Owner == Piece.Colour.White
 				? Resources.WhitePieces[piece.Type]

@@ -6,7 +6,7 @@ using Godot;
 
 namespace Chess
 {
-	public class HumanPlayer : Player
+	public partial class HumanPlayer : Player
 	{
 		private TaskCompletionSource<Position> SquareClickedTcs;
 

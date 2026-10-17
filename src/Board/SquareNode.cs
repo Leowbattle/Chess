@@ -3,7 +3,7 @@ using System;
 
 namespace Chess
 {
-	public class SquareNode : Node2D
+	public partial class SquareNode : Node2D
 	{
 		private BoardNode Board;
 
@@ -35,17 +35,17 @@ namespace Chess
 			Rect = new ColorRect();
 			AddChild(Rect);
 			Rect.Color = Colour == Piece.Colour.White ? WhiteColour : BlackColour;
-			Rect.RectSize = new Vector2(SquareSize, SquareSize);
+			Rect.Size = new Vector2(SquareSize, SquareSize);
 
 			var pos = BoardNode.ScreenCoords(Position);
-			Rect.RectPosition = pos;
+			Rect.Position = pos;
 		}
 
 		public override void _Input(InputEvent e)
 		{
 			if (e is InputEventMouseButton m)
 			{
-				if (Input.IsMouseButtonPressed((int)ButtonList.Left) && Rect.GetRect().HasPoint(m.Position))
+				if (Input.IsMouseButtonPressed(MouseButton.Left) && Rect.GetRect().HasPoint(m.Position))
 				{
 					Clicked?.Invoke(Position);
 				}

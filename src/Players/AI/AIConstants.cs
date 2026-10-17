@@ -1,6 +1,6 @@
 namespace Chess
 {
-	public class AIConstants
+	public partial class AIConstants
 	{
 		public static AIConstants Default => new AIConstants();
 

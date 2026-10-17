@@ -3,7 +3,7 @@ using System;
 
 namespace Chess
 {
-	public class UI : Control
+	public partial class UI : Control
 	{
 		private BoardNode Board;
 
@@ -18,8 +18,8 @@ namespace Chess
 
 			PromotionUI = GetNode<PromotionUI>("Promotion");
 
-			GetNode<Button>("Checkmate/Menu").Connect("pressed", this, nameof(Menu));
-			GetNode<Button>("Stalemate/Menu").Connect("pressed", this, nameof(Menu));
+			GetNode<Button>("Checkmate/Menu").Connect("pressed", new Callable(this, nameof(Menu)));
+			GetNode<Button>("Stalemate/Menu").Connect("pressed", new Callable(this, nameof(Menu)));
 		}
 
 		private void OnCheckmate(Piece.Colour winner)
@@ -38,7 +38,7 @@ namespace Chess
 		private void Menu()
 		{
 			var scn = GD.Load<PackedScene>("src/Menu.tscn");
-			var menu = (Menu)scn.Instance();
+			var menu = (Menu)scn.Instantiate();
 			GetParent().AddChild(menu);
 			QueueFree();
 		}

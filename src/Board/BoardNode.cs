@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Chess
 {
-	public class BoardNode : Control
+	public partial class BoardNode : Control
 	{
 		public const int BoardSize = SquareNode.SquareSize * Board.Size;
 
@@ -98,7 +98,7 @@ namespace Chess
 
 				GD.Print($"{CurrentPlayer} wants to move {move}");
 				await Task.Run(() => Board.DoMove(move, p => Current.Promote(p).Result));
-				drawer.Update();
+				drawer.QueueRedraw();
 
 				CurrentPlayer = CurrentPlayer.Opposite();
 			}

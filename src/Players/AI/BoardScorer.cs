@@ -7,7 +7,7 @@ namespace Chess
 	/// <summary>
 	/// Assigns a game state a score that says how *good* it is for the AI.
 	/// </summary>
-	public class BoardScorer
+	public partial class BoardScorer
 	{
 		private readonly Board Board;
 		private readonly Piece.Colour Player;

@@ -3,7 +3,7 @@ using System;
 
 namespace Chess
 {
-	public class PlayerTypeSelector : HBoxContainer
+	public partial class PlayerTypeSelector : HBoxContainer
 	{
 		public enum PlayerType
 		{
@@ -28,7 +28,11 @@ namespace Chess
 			who.Text = $"{Who}: ";
 
 			Selector = GetNode<OptionButton>("Type");
-			Selector.Selected = (int)Default;
+			Selector.Clear();
+			Selector.AddItem(nameof(PlayerType.Human), (int)PlayerType.Human);
+			Selector.AddItem(nameof(PlayerType.Computer), (int)PlayerType.Computer);
+			Selector.AddItem(nameof(PlayerType.Random), (int)PlayerType.Random);
+			Selector.Select((int)Default);
 		}
 	}
 }

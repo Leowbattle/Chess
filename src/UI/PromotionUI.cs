@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Chess
 {
-	public class PromotionUI : VBoxContainer
+	public partial class PromotionUI : VBoxContainer
 	{
 		private BoardNode Board;
 
@@ -54,10 +54,10 @@ namespace Chess
 			Bishop = GetNode<TextureButton>("Choices/Bishop");
 			Queen = GetNode<TextureButton>("Choices/Queen");
 
-			Rook.Connect("pressed", this, nameof(RookChosen));
-			Knight.Connect("pressed", this, nameof(KnightChosen));
-			Bishop.Connect("pressed", this, nameof(BishopChosen));
-			Queen.Connect("pressed", this, nameof(QueenChosen));
+			Rook.Connect("pressed", new Callable(this, nameof(RookChosen)));
+			Knight.Connect("pressed", new Callable(this, nameof(KnightChosen)));
+			Bishop.Connect("pressed", new Callable(this, nameof(BishopChosen)));
+			Queen.Connect("pressed", new Callable(this, nameof(QueenChosen)));
 		}
 
 		private void RookChosen()
